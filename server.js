@@ -1,14 +1,19 @@
+import express from "express";
 import axios from "axios";
 
-async function readFullDB() {
+const app = express();
+app.use(express.json());
+
+const DATABASE_URL = "https://parkashbhai-default-rtdb.firebaseio.com/";
+
+// FULL DB
+app.get("/full", async (req, res) => {
   try {
-    const DATABASE_URL = "https://parkashbhai-default-rtdb.firebaseio.com/"; // yaha apna url
-
     const response = await axios.get(`${DATABASE_URL}/.json`);
-    console.log("FULL DATABASE:", response.data);
+    res.json(response.data);
   } catch (err) {
-    console.error("ERROR:", err.message);
+    res.status(500).json({ error: err.message });
   }
-}
+});
 
-readFullDB();
+app.listen(3000, () => console.log("API running on 3000"));
